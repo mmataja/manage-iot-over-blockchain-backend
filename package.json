@@ -22,7 +22,5 @@
     "solc": "^0.5.12",
     "web3": "^1.2.1"
   },
-  "devDependencies": {
-    "eslint": "^6.5.1"
-  }
+  "devDependencies": {}
 }
