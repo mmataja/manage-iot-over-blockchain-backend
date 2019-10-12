@@ -1,23 +1,36 @@
 pragma solidity ^0.5.0;
+pragma experimental ABIEncoderV2;
 
 contract ManageDevice {
     address owner;
-    uint deviceCount = 0;
-    
+
     struct Device {
-        string owner;
-        string name;
-        string firmware;
-        string publicKey;
+        uint id;
+        string signature;
+    }
+
+    mapping(uint => Device) public devices;
+    uint public deviceCount;
+
+    constructor() public{
+        deviceCount = 0;
     }
     
-    mapping(uint => Device) public devices;
-    
-    function registerDevice(string memory _deviceOwner, 
-                            string memory _deviceName, 
-                            string memory _deviceFirmware, 
-                            string memory _publicKey) public {
-        devices[deviceCount] = Device(_deviceOwner, _deviceName, _deviceFirmware, _publicKey);
+    function registerDevice(string memory _signature) public {
+        devices[deviceCount] = Device(deviceCount, _signature);
         deviceCount++;
+    }
+    
+    function getDevice(uint _id) public view returns (Device memory) {
+        return devices[_id];
+    }
+    
+    function getDevices() public view returns (Device[] memory) {
+        Device[] memory id = new Device[](deviceCount);
+        for (uint i = 0; i < deviceCount; i++) {
+            Device storage device = devices[i];
+            id[i] = device;
+        }
+        return id;
     }
 }
