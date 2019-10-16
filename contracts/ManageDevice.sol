@@ -13,6 +13,7 @@ contract ManageDevice {
     uint public deviceCount;
 
     constructor() public{
+        owner = msg.sender;
         deviceCount = 0;
     }
     
