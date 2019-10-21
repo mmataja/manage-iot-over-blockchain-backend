@@ -3,23 +3,26 @@ pragma experimental ABIEncoderV2;
 
 contract ManageDevice {
     address owner;
-
+    
     struct Device {
         uint id;
         string signature;
     }
-
+    
     mapping(uint => Device) public devices;
     uint public deviceCount;
-
+    
     constructor() public{
         owner = msg.sender;
         deviceCount = 0;
     }
     
+    event DeviceRegister(address owner, uint blockNumber, address contractAddress);
+    
     function registerDevice(string memory _signature) public {
         devices[deviceCount] = Device(deviceCount, _signature);
         deviceCount++;
+        emit DeviceRegister(owner, block.number, address(this));
     }
     
     function getDevice(uint _id) public view returns (Device memory) {
