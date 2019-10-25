@@ -1,8 +1,7 @@
 const fs = require('fs');
 const solc = require('solc');
-const Web3 = require('web3');
 
-const web3 = new Web3("http://127.0.0.1:7545");
+const { web3 } = require('../../utils');
 
 const sourceCode = fs.readFileSync('/home/mateo/diplomskiProjekt/manage-iot-using-blockchain/manage-iot-over-blockchain-backend/contracts/ManageDevice.sol', 'UTF-8');
 
@@ -29,5 +28,5 @@ const addContract = new web3.eth.Contract(contractABI);
 
 module.exports = { 
   byteCode, 
-  addContract 
+  addContract
 }
