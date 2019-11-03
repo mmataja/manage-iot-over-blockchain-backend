@@ -7,20 +7,27 @@ contract ManageDevice {
     struct Device {
         uint id;
         string signature;
+        string url;
+        string publicKey;
     }
     
-    mapping(uint => Device) public devices;
-    uint public deviceCount;
+    mapping(uint => Device) devices;
+    uint deviceCount;
     
     constructor() public{
         owner = msg.sender;
         deviceCount = 0;
     }
     
+    modifier onlyOwner() {
+        require (msg.sender == owner, "Sender is not contract owner.");
+        _;
+    }
+    
     event DeviceRegister(address owner, uint blockNumber, address contractAddress);
     
-    function registerDevice(string memory _signature) public {
-        devices[deviceCount] = Device(deviceCount, _signature);
+    function registerDevice(string memory _signature, string memory _url, string memory _publicKey) onlyOwner public {
+        devices[deviceCount] = Device(deviceCount, _signature, _url, _publicKey);
         deviceCount++;
         emit DeviceRegister(owner, block.number, address(this));
     }
