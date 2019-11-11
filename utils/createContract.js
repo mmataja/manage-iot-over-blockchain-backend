@@ -1,7 +1,7 @@
 const fs = require('fs');
 const solc = require('solc');
 
-const { web3 } = require('../../utils');
+const web3 = require('./web3');
 
 const sourceCode = fs.readFileSync('/home/mateo/diplomskiProjekt/manage-iot-using-blockchain/manage-iot-over-blockchain-backend/contracts/ManageDevice.sol', 'UTF-8');
 

@@ -1,3 +1,3 @@
-const createContract = require('./createContract');
+const register = require('./register');
 
-module.exports.createContract = createContract;
+module.exports.register = register;
