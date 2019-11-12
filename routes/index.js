@@ -1,9 +1,9 @@
 const router = require('express').Router();
 
-const manageDevice = require('./manageDevice');
+const registerDevice = require('./registerDevice');
 
 module.exports = () => {
-  manageDevice(router);
+  registerDevice(router);
 
   return router;
 }
