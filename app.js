@@ -1,7 +1,12 @@
-const express = require('express')
 const bodyParser = require('body-parser');
+const express = require('express')
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 const routes = require('./routes');
+
+const MONGO_URL = process.env.MONGO_URL;
+const PORT = process.env.PORT || 8000;
 
 const app = express();
 
@@ -13,8 +18,13 @@ app.use(function(req, res, next) {
   next();
 });
 
+mongoose.connect(MONGO_URL, { useNewUrlParser: true });
+
+mongoose.connection.once('open', () => console.log('Connected to the database!'));
+mongoose.connection.on('error', () => console.log('MongoDB connection error: '))
+
 app.use('/', routes());
 
-app.listen(8000, () => {
-  console.log('Example app listening on port 8000!')
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}!`)
 });
