@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { Schema, ObjectId } = mongoose;
 
 const Contracts = mongoose.model('Contracts', new Schema({
-  _id: { type: String, required: true, index: true },
+  address: { type: String, required: true, index: true },
   owner: { type: String },
   ownerAddress: { type: String },
   devices: [{ type: ObjectId, ref: 'Devices' }],
@@ -12,9 +12,16 @@ const Contracts = mongoose.model('Contracts', new Schema({
   timestamps: true,
 }));
 
-module.exports.create = async (data) => {
+module.exports.create = data => {
   const contract = data;
 
-  return await Contracts(contract).save();
+  return Contracts(contract).save();
 };
+
+module.exports.getByAddress = address => {
+  /** TODO
+   * check if address is valid ethereum address
+   */
+  return Contracts.findOne({ ownerAddress: address }); 
+}
 
