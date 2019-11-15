@@ -24,9 +24,9 @@ const input = {
 const output = JSON.parse(solc.compile(JSON.stringify(input)));
 const contractABI = output.contracts['manageDevice.sol'].ManageDevice.abi;
 const byteCode = output.contracts['manageDevice.sol'].ManageDevice.evm.bytecode.object;
-const contractJSON = new web3.eth.Contract(contractABI);
+const contractInterface = new web3.eth.Contract(contractABI);
 
 module.exports = { 
   byteCode, 
-  contractJSON
+  contractInterface
 }
