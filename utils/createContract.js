@@ -28,5 +28,6 @@ const contractInterface = new web3.eth.Contract(contractABI);
 
 module.exports = { 
   byteCode, 
-  contractInterface
+  contractInterface,
+  contractABI
 }
