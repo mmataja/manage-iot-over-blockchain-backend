@@ -25,3 +25,11 @@ module.exports.getByAddress = address => {
   return Contracts.findOne({ ownerAddress: address }); 
 }
 
+module.exports.addDevice = (contractAddress, deviceId) => {
+  return Contracts.findOneAndUpdate(
+    { address: contractAddress }, 
+    { $push: { devices: deviceId }},
+    { new: true },
+  );
+}
+

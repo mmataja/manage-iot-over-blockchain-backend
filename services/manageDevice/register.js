@@ -5,11 +5,10 @@ const { contractInterface, byteCode, contractABI } = createContract;
 
 module.exports = async data => {
   const { account, signature, url, publicKey, deviceOwner, deviceName } = data;
-  let contractAddress;
+  
+  let createdContract = await db.Contracts.getByAddress(account);
 
-  const contractCreated = await db.Contracts.getByAddress(account);
-
-  if (!contractCreated) {
+  if (!createdContract) {
     const deviceRegisterContract = await contractInterface.deploy({ data: byteCode }).send({
       from: account,
       gas: 1500000,
@@ -23,22 +22,28 @@ module.exports = async data => {
       ownerAddress: account,
     }
 
-    await db.Contracts.create(contractData);
+    createdContract = await db.Contracts.create(contractData);
   }
 
-  contractAddress = contractAddress === undefined ? contractCreated.address : contractAddress;
+  const deployedContract = new web3.eth.Contract(contractABI, createdContract.address);
 
-  const deployedContract = await new web3.eth.Contract(contractABI, contractAddress);
-
-  await deployedContract.methods.registerDevice(signature, url, publicKey).send({
+  await deployedContract.methods.registerDevice(signature, publicKey).send({
     from: account,
     gas: 1500000,
+  }).on('receipt', async (receipt) => {
+    const deviceEthereumId = receipt.events.DeviceRegister.returnValues.deviceCount;
+    const deviceData = {
+      id: deviceEthereumId,
+      name: deviceName,
+      contract: createdContract._id,
+      owner: deviceOwner,
+      url,
+    }
+
+    const device = await db.Devices.create(deviceData)
+    if(!device) "Something is wrong with saving device to DB.";
+
+    return db.Contracts.addDevice(createdContract.address, device._id);
   });
 
-  // await deviceRegisterContract.methods.registerDevice(signature, url, publicKey).send({
-  //   from: account,
-  //   gas: 1500000,
-  // }).on('receipt', (receipt) => {
-  //   // console.log("OVO JE RAČUN", receipt);
-  // });
 }
