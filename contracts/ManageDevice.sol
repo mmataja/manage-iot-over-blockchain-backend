@@ -7,7 +7,6 @@ contract ManageDevice {
     struct Device {
         uint id;
         string signature;
-        string url;
         string publicKey;
     }
     
@@ -24,12 +23,12 @@ contract ManageDevice {
         _;
     }
     
-    event DeviceRegister(address owner, uint blockNumber, address contractAddress);
+    event DeviceRegister(address owner, uint blockNumber, address contractAddress, uint deviceCount);
     
-    function registerDevice(string memory _signature, string memory _url, string memory _publicKey) onlyOwner public {
-        devices[deviceCount] = Device(deviceCount, _signature, _url, _publicKey);
+    function registerDevice(string memory _signature, string memory _publicKey) public onlyOwner {
+        devices[deviceCount] = Device(deviceCount, _signature, _publicKey);
+        emit DeviceRegister(owner, block.number, address(this), deviceCount);
         deviceCount++;
-        emit DeviceRegister(owner, block.number, address(this));
     }
     
     function getDevice(uint _id) public view returns (Device memory) {
