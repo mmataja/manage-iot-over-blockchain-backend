@@ -1,4 +1,4 @@
-const { createContract, web3 } = require('../../utils');
+const { createContract, encrypt, web3 } = require('../../utils');
 const db = require('../../models');
 
 const { contractInterface, byteCode, contractABI } = createContract;
@@ -31,6 +31,7 @@ module.exports = async data => {
     from: account,
     gas: 1500000,
   }).on('receipt', async (receipt) => {
+    const { blockNumber } = receipt;
     const deviceEthereumId = receipt.events.DeviceRegister.returnValues.deviceCount;
     const deviceData = {
       id: deviceEthereumId,
@@ -40,10 +41,15 @@ module.exports = async data => {
       url,
     }
 
+    const encrypted = encrypt(deviceData, blockNumber, publicKey);
+
+    console.log("ENCRYPTED DATA....", encrypted);
+
     const device = await db.Devices.create(deviceData)
     if(!device) "Something is wrong with saving device to DB.";
 
-    return db.Contracts.addDevice(createdContract.address, device._id);
-  });
+    await db.Contracts.addDevice(createdContract.address, device._id);
 
+
+  });
 }
