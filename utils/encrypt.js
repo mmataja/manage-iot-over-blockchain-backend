@@ -1,17 +1,15 @@
 const crypto = require('crypto');
+const sshKeyToPEM = require('ssh-key-to-pem');
 
 module.exports = (data, blockNumber, publicKey) => {
   const dataToEncrypt = {
     data,
     blockNumber
   };
-  /**
-   * TODO
-   * 1) Ne valja enkripcija, nesto nije dobro s publicKey, pogledati sutra
-   * 2) Napraviti ispravnu dekripciju na uređaju
-   */
 
-  const buffer = Buffer.from(JSON.stringify(dataToEncrypt));
-  const encryptedData = crypto.publicEncrypt(trimedPK, buffer);
+  const sshPublicKey = sshKeyToPEM(publicKey);
+
+  const buffer = Buffer.from((dataToEncrypt, 'utf-8'));
+  const encryptedData = crypto.publicEncrypt(sshPublicKey, buffer);
   return encryptedData.toString('base64');
 }
