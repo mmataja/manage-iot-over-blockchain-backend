@@ -1,10 +1,8 @@
-const crypto = require('crypto');
-const sshKeyToPEM = require('ssh-key-to-pem');
+const NodeRSA = require('node-rsa');
 
 module.exports = (data, publicKey) => {
-  const sshPublicKey = sshKeyToPEM(publicKey);
+  const key = new NodeRSA(publicKey);
 
-  const buffer = Buffer.from((data, 'utf-8'));
-  const encryptedData = crypto.publicEncrypt(sshPublicKey, buffer);
-  return encryptedData.toString('base64');
+  const encryptedData = key.encrypt(data, 'base64');
+  return encryptedData;
 }
