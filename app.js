@@ -18,7 +18,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-mongoose.connect(MONGO_URL, { useNewUrlParser: true });
+mongoose.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
 mongoose.connection.once('open', () => console.log('Connected to the database!'));
 mongoose.connection.on('error', () => console.log('MongoDB connection error: '))
