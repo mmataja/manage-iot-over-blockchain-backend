@@ -26,8 +26,8 @@ module.exports = async data => {
   }
 
   const deployedContract = new web3.eth.Contract(contractABI, createdContract.address);
-
-  const encryptData = await deployedContract.methods.registerDevice(signature, publicKey).send({
+  
+  const encryptData = await deployedContract.methods.registerDevice(signature.signature, publicKey).send({
     from: account,
     gas: 1500000,
   }).then( async (receipt) => {
@@ -38,7 +38,7 @@ module.exports = async data => {
       id: deviceEthereumId,
       contract: createdContract._id,
       blockNumber,
-      signature,
+      signature: signature.signature,
       account,
     }
 
@@ -52,7 +52,9 @@ module.exports = async data => {
 
     const device = await db.Devices.create(query)
     
-    if(!device) "Something is wrong with saving device to DB.";
+    if(!device) {
+      "Something is wrong with saving device to DB.";
+    }
     
     await db.Contracts.addDevice(createdContract.address, device._id);
     

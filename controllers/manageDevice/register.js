@@ -12,11 +12,12 @@ module.exports = async (req, res) => {
       encryptData,
     });
 
-    console.log("RESPONSE....", response)
-    
+    res.status(200).send(response.data);
   } catch (error) {
+    if (error.response.status === 422) {
+      return res.status(422).send("Data does not match.");
+    }
+    
     console.log(error);
   }
-
-  res.status(200).send("Device successfully registered.");
 }
