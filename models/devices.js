@@ -21,4 +21,8 @@ module.exports.create = async data => {
   const device = data;
 
   return await Devices(device).save();
+};
+
+module.exports.get = async () => {
+  return Devices.find();
 }
