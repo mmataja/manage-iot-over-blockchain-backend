@@ -1,7 +1,7 @@
 const db = require('../../models');
 
-module.exports = async () => {
-  const devices = db.Devices.get();
+module.exports = async (options) => {
+  const devices = db.Devices.get(options);
 
   return devices;
 }

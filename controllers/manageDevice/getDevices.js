@@ -1,9 +1,10 @@
-const axios = require('axios');
-
 const { manageDevice } = require('../../services');
 
 module.exports = async (req, res) => {
-  const devices = await manageDevice.getDevices();
+  const { page, limit } = req.query;
+  const options = { page, limit };
 
-  console.log("DEVICES....", devices);
-}
+  const devices = await manageDevice.getDevices(options);
+
+  return res.status(200).send(devices);
+};

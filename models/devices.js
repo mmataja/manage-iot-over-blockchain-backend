@@ -23,6 +23,8 @@ module.exports.create = async data => {
   return await Devices(device).save();
 };
 
-module.exports.get = async () => {
-  return Devices.find();
+module.exports.get = (options = {}) => {
+  const { page, limit } = options;
+
+  return Devices.find().skip(parseInt(limit * (page - 1))).limit(parseInt(limit));
 }
