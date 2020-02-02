@@ -28,3 +28,7 @@ module.exports.get = (options = {}) => {
 
   return Devices.find().skip(parseInt(limit * (page - 1))).limit(parseInt(limit));
 }
+
+module.exports.updateById = (id, options = {}) => {
+  
+}
